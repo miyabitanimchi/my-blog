@@ -8,11 +8,11 @@ const headerLinks = [
 
 const Header = () => {
   return (
-    <div className="mx-auto mb-8">
-      <div
-        className="border-b w-full inline-block border-gray-100 py-4 bg-white shadow-lg bg-opacity-60 bg-clip-padding"
-        style={{ backdropFilter: 'blur(20px)' }}
-      >
+    <div
+      className="mx-auto fixed w-screen z-10 border-b border-gray-100 py-4 bg-white shadow-lg bg-opacity-50 bg-clip-padding"
+      style={{ backdropFilter: 'blur(20px)' }}
+    >
+      <div className="w-full inline-block px-4 align-middle">
         <div className="md:float-left block px-2">
           <Link href="/">
             <span className="cursor-pointer text-2xl text-pink-400 ">
