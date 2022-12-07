@@ -15,7 +15,7 @@ const Header = () => {
       >
         <div className="md:float-left block px-2">
           <Link href="/">
-            <span className="cursor-pointer font-bold text-2xl text-pink-400 ">
+            <span className="cursor-pointer text-2xl text-pink-400 ">
               Omiya Blog
             </span>
           </Link>
@@ -23,7 +23,9 @@ const Header = () => {
         <div className="hidden md:float-left md:contents">
           {headerLinks.map((link) => (
             <Link key={link.slug} href={`/something/${link.slug}`}>
-              <span className="md:float-right mt-2 align-middle text-white ml-4 font-semibold cursor-pointer"></span>
+              <span className="md:float-right mt-2 align-middle text-gray-800 ml-4 font-semibold cursor-pointer">
+                {link.name}
+              </span>
             </Link>
           ))}
         </div>
