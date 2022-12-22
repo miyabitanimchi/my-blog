@@ -1,11 +1,8 @@
 import React from "react";
 import { format } from "date-fns";
 import Link from "next/link";
-
-interface PostProp {
-  title: string;
-  excerpt: string;
-}
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 
 const PostCard = ({ post }: any) => {
   console.log(post);
@@ -35,13 +32,14 @@ const PostCard = ({ post }: any) => {
           </p>
         </div>
         <div className="font-medium text-gray-700 ">
-          <span>{format(new Date(), "M-d-yyyy")}</span>
+          <FontAwesomeIcon icon={faCalendarDays} />
+          <span className="pl-1">{format(new Date(), "M-d-yyyy")}</span>
         </div>
       </div>
       <p className="text-center text-lg text-gray-700 font-normal px-4 lg:px-20 mb-8"></p>
       <div className="text-center">
         <Link href={`/post/${post.slug}`}>
-          <span className="transition duration-500 transform hover:-translate-y-1 inline-block bg-pink-300 text-lg font-medium rounded-full">
+          <span className="transition duration-500 transform hover:-translate-y-1 inline-block bg-pink-300 text-base font-medium rounded-full text-white px-5 py-2 cursor-pointer">
             Continue Reading
           </span>
         </Link>
