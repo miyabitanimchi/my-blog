@@ -41,7 +41,7 @@ export const getRecentPosts = async () => {
   const query = gql`
     query GetPostDetails() {
       posts(
-        orderBy: createAt_ASC
+        orderBy: createdAt_ASC
         last: 3
         ) {
           title
@@ -51,6 +51,31 @@ export const getRecentPosts = async () => {
           createdAt
           slug
         }
+    }
+  `;
+  const result = await request(graphqlAPI, query);
+
+  return result.posts;
+};
+
+// String! means that the field is non-nullable
+export const getSimilarPosts = async (categories: string, slug: string) => {
+  const query = gql`
+    query GetPostDetails($slug: String!, $categories: [String!]) {
+      posts(
+        where: {
+          slug_not: $slug
+          AND: { categories_some: { slug_on: $categories } }
+          last: 3
+        }
+      ) {
+        title
+        featuredImage {
+          url
+        }
+        createdAt
+        slug
+      }
     }
   `;
   const result = await request(graphqlAPI, query);
