@@ -82,14 +82,14 @@ export const getRecentPosts = async () => {
       posts(
         orderBy: createdAt_ASC
         last: 3
-        ) {
-          title
-          featuredImage {
-            url
-          }
-          createdAt
-          slug
+      ) {
+        title
+        featuredImage {
+          url
         }
+        createdAt
+        slug
+      }
     }
   `;
   const result = await request(graphqlAPI, query);
