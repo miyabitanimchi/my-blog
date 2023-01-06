@@ -6,6 +6,78 @@ import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 
 const PostDetail = ({ post }: any) => {
   console.log(post);
+  const getContentFragment = (
+    index: number,
+    text: string,
+    obj: any,
+    type?: string
+  ) => {
+    let modifiedText: any = text;
+
+    if (obj) {
+      if (obj.bold) {
+        modifiedText = (
+          <b className="font-black text-black" key={index}>
+            {text}
+          </b>
+        );
+      }
+
+      if (obj.italic) {
+        modifiedText = <em key={index}>{text}</em>;
+      }
+
+      if (obj.underline) {
+        modifiedText = <u key={index}>{text}</u>;
+      }
+      if (obj.code) {
+        modifiedText = (
+          <span className="text-white bg-black rounded px-2" key={index}>
+            {text}
+          </span>
+        );
+      }
+    }
+
+    switch (type) {
+      case "heading-three":
+        return (
+          <h3 key={index} className="text-xl font-semibold mb-4">
+            {modifiedText.map((item: any, i: number) => (
+              <React.Fragment key={i}>{item}</React.Fragment>
+            ))}
+          </h3>
+        );
+      case "paragraph":
+        return (
+          <p key={index} className="mb-8">
+            {modifiedText.map((item: any, i: number) => (
+              <React.Fragment key={i}>{item}</React.Fragment>
+            ))}
+          </p>
+        );
+      case "heading-four":
+        return (
+          <h4 key={index} className="text-md font-semibold mb-4">
+            {modifiedText.map((item: any, i: number) => (
+              <React.Fragment key={i}>{item}</React.Fragment>
+            ))}
+          </h4>
+        );
+      case "image":
+        return (
+          <Image
+            key={index}
+            alt={obj.title}
+            height={obj.height}
+            width={obj.width}
+            src={obj.src}
+          />
+        );
+      default:
+        return modifiedText;
+    }
+  };
   return (
     <div className="bg-white shadow-lg rounded-lg lg:p-8 pb-12 mb-8">
       <div className="relative overflow-hidden shadow-md pb-80  mb-6">
@@ -36,6 +108,15 @@ const PostDetail = ({ post }: any) => {
             <span className="pl-1">{format(new Date(), "M-d-yyyy")}</span>
           </div>
         </div>
+        <h1 className="mb-8 text-3xl font-semibold">{post.title}</h1>
+        {console.log(post.content.raw)}
+        {post.content.raw.children.map((typeObj: any, index: number) => {
+          const children = typeObj.children.map(
+            (item: any, itemIndex: number) =>
+              getContentFragment(itemIndex, item.text, item)
+          );
+          return getContentFragment(index, children, typeObj, typeObj.type);
+        })}
       </div>
     </div>
   );
