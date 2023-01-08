@@ -1,5 +1,3 @@
-import { faL } from "@fortawesome/free-solid-svg-icons";
-import { spawn } from "child_process";
 import React, { useState, useEffect, useRef } from "react";
 
 const CommentsForm = ({ slug }: any) => {
@@ -9,9 +7,26 @@ const CommentsForm = ({ slug }: any) => {
   const commentEl = useRef<HTMLTextAreaElement>(null);
   const nameEl = useRef<HTMLInputElement>(null);
   const emailEl = useRef<HTMLInputElement>(null);
-  const storeDetaEl = useRef();
+  const storeDataEl = useRef(null);
 
-  const handleCommentSubmit = () => {};
+  const handleCommentSubmit = () => {
+    setError(false);
+
+    const { value: comment } = commentEl.current as HTMLTextAreaElement;
+    const { value: name } = nameEl.current as HTMLInputElement;
+    const { value: email } = emailEl.current as HTMLInputElement;
+
+    if (!comment || !name || email) {
+      setError(true);
+      return;
+    }
+    const commentInfo = {
+      name,
+      email,
+      comment,
+      slug,
+    };
+  };
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 pb-12 mb-8">
@@ -43,6 +58,23 @@ const CommentsForm = ({ slug }: any) => {
       {error && (
         <p className="text-xs text-red-400 ">All fields are required.</p>
       )}
+      <div className="grid grid-cols-1 gap-4 mb-4">
+        <div>
+          <input
+            ref={storeDataEl}
+            type="checkbox"
+            id="storeData"
+            name="storeData"
+            checked={true}
+          />
+          <label
+            htmlFor="storeData"
+            className="text-gray-500 cursor-pointer ml-2"
+          >
+            Save my email and name for the next time I comment
+          </label>
+        </div>
+      </div>
       <div className="mt-8 flex justify-center">
         <button
           type="button"
