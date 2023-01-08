@@ -1,22 +1,33 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 const CommentsForm = ({ slug }: any) => {
   const [error, setError] = useState(false);
-  const [localStorage, setLocalStorage] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const commentEl = useRef<HTMLTextAreaElement>(null);
-  const nameEl = useRef<HTMLInputElement>(null);
-  const emailEl = useRef<HTMLInputElement>(null);
-  const storeDataEl = useRef(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    comment: "",
+    storeData: true,
+  });
+
+  useEffect(() => {
+    const userInfo: any = JSON.parse(
+      localStorage.getItem("omiyaBlog:userInfo") || "{}"
+    );
+    const initalFormData = {
+      ...formData,
+      name: userInfo.name || "",
+      email: userInfo.email || "",
+    };
+    setFormData(initalFormData);
+  }, []);
 
   const handleCommentSubmit = () => {
     setError(false);
+    const { name, email, comment, storeData } = formData;
+    console.log(name, email, comment);
 
-    const { value: comment } = commentEl.current as HTMLTextAreaElement;
-    const { value: name } = nameEl.current as HTMLInputElement;
-    const { value: email } = emailEl.current as HTMLInputElement;
-
-    if (!comment || !name || email) {
+    if (!comment || !name || !email) {
       setError(true);
       return;
     }
@@ -26,6 +37,34 @@ const CommentsForm = ({ slug }: any) => {
       comment,
       slug,
     };
+
+    if (storeData) {
+      localStorage.setItem(
+        "omiyaBlog:userInfo",
+        JSON.stringify({ name, email })
+      );
+    } else {
+      localStorage.removeItem("omiyaBlog:userInfo");
+    }
+  };
+
+  const onInputChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
+    const { target }: any = e;
+    if (target.type === "checkbox") {
+      setFormData((prevState) => ({
+        ...prevState,
+        [target.name]: target.checked,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [target.name]: target.value,
+      }));
+    }
   };
 
   return (
@@ -33,26 +72,29 @@ const CommentsForm = ({ slug }: any) => {
       <h3 className="text-xl mb-8 font-semibold border-b pb-4">Comment</h3>
       <div className="grid grid-cols-1 gap-4 mb-4">
         <textarea
-          ref={commentEl}
+          onChange={onInputChange}
           className="p-4 outline-none w-full rounded-lg focus:ring-2 focus:ring-gray-200 bg-gray-100 text-gray-700"
           placeholder="Comment"
           name="comment"
+          value={formData.comment}
         ></textarea>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         <input
           type="text"
-          ref={nameEl}
+          onChange={onInputChange}
           className="p-4 outline-none w-full rounded-lg focus:ring-2 focus:ring-gray-200 bg-gray-100 text-gray-700"
           placeholder="Name"
           name="name"
+          value={formData.name}
         />
         <input
           type="text"
-          ref={emailEl}
+          onChange={onInputChange}
           className="p-4 outline-none w-full rounded-lg focus:ring-2 focus:ring-gray-200 bg-gray-100 text-gray-700"
           placeholder="Email"
           name="email"
+          value={formData.email}
         />
       </div>
       {error && (
@@ -61,11 +103,11 @@ const CommentsForm = ({ slug }: any) => {
       <div className="grid grid-cols-1 gap-4 mb-4">
         <div>
           <input
-            ref={storeDataEl}
+            value="true"
             type="checkbox"
             id="storeData"
             name="storeData"
-            checked={true}
+            checked={formData.storeData}
           />
           <label
             htmlFor="storeData"
