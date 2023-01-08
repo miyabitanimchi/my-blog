@@ -6,9 +6,11 @@ const CommentsForm = ({ slug }: any) => {
   const [localStorage, setLocalStorage] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const commentEl = useRef<HTMLTextAreaElement>(null);
-  const nameEl = useRef();
-  const emailEl = useRef();
+  const nameEl = useRef<HTMLInputElement>(null);
+  const emailEl = useRef<HTMLInputElement>(null);
   const storeDetaEl = useRef();
+
+  const handleCommentSubmit = () => {};
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 pb-12 mb-8">
@@ -20,6 +22,30 @@ const CommentsForm = ({ slug }: any) => {
           placeholder="Comment"
           name="comment"
         ></textarea>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <input
+          type="text"
+          ref={nameEl}
+          className="p-4 outline-none w-full rounded-lg focus:ring-2 focus:ring-gray-200 bg-gray-100 text-gray-700"
+          placeholder="Name"
+          name="name"
+        />
+        <input
+          type="text"
+          ref={emailEl}
+          className="p-4 outline-none w-full rounded-lg focus:ring-2 focus:ring-gray-200 bg-gray-100 text-gray-700"
+          placeholder="Email"
+          name="email"
+        />
+      </div>
+      {error && (
+        <p className="text-xs text-red-400 ">All fields are required.</p>
+      )}
+      <div className="mt-8">
+        <button type="button" onClick={handleCommentSubmit}>
+          Submit
+        </button>
       </div>
     </div>
   );
