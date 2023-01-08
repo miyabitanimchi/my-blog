@@ -1,4 +1,5 @@
 import { faL } from "@fortawesome/free-solid-svg-icons";
+import { spawn } from "child_process";
 import React, { useState, useEffect, useRef } from "react";
 
 const CommentsForm = ({ slug }: any) => {
@@ -42,10 +43,19 @@ const CommentsForm = ({ slug }: any) => {
       {error && (
         <p className="text-xs text-red-400 ">All fields are required.</p>
       )}
-      <div className="mt-8">
-        <button type="button" onClick={handleCommentSubmit}>
-          Submit
+      <div className="mt-8 flex justify-center">
+        <button
+          type="button"
+          onClick={handleCommentSubmit}
+          className="transition duration-300 ease hover:bg-pink-600 inline-block bg-pink-400 text-lg rounded-full text-white px-8 py-3 cursor-pointer"
+        >
+          Post Comment
         </button>
+        {showSuccessMessage && (
+          <span className="text-sm float-right font-semibold text-green-400">
+            Comment submitted for review!
+          </span>
+        )}
       </div>
     </div>
   );
