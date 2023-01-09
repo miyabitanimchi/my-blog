@@ -9,7 +9,7 @@ import { GraphQLClient, gql } from "graphql-request";
 // endpoint for comments
 const graphqlAPI: string = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT || "";
 
-export const comments = async (req: NextApiRequest, res: NextApiResponse) => {
+const comments = async (req: NextApiRequest, res: NextApiResponse) => {
   const graphQLClient = new GraphQLClient(graphqlAPI, {
     headers: {
       authorization: `Bearer ${process.env.GRAPHCMS_TOKEN}`,
@@ -34,8 +34,13 @@ export const comments = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     }
   `;
+  try {
+    const result = await graphQLClient.request(query, req.body);
+  } catch (error) {
+    console.log(error);
+  }
 
-  const result = await graphQLClient.request(query, req.body);
-
-  return res.status(200).send(result);
+  // return res.status(200).send(result);
 };
+
+export default comments;

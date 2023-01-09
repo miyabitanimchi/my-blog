@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 
 const PostDetail = ({ post }: any) => {
-  console.log(post);
   const getContentFragment = (
     index: number,
     text: string,
@@ -109,7 +108,6 @@ const PostDetail = ({ post }: any) => {
           </div>
         </div>
         <h1 className="mb-8 text-3xl font-semibold">{post.title}</h1>
-        {console.log(post.content.raw)}
         {post.content.raw.children.map((typeObj: any, index: number) => {
           const children = typeObj.children.map(
             (item: any, itemIndex: number) =>

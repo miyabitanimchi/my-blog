@@ -1,4 +1,3 @@
-import { constants } from "crypto";
 import { request, gql } from "graphql-request";
 
 const graphqlAPI: string = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT || "";
@@ -140,8 +139,14 @@ export const getCategories = async () => {
 export const submitComment = async (obj: any) => {
   const result = await fetch("/api/comments", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(obj),
-  });
+  })
+    .then()
+    .catch((err) => console.log(err));
+  console.log(obj);
 
-  return result.json();
+  // return result.json();
 };

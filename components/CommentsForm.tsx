@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { submitComment } from "../services";
 
 const CommentsForm = ({ slug }: any) => {
   const [error, setError] = useState(false);
@@ -12,7 +13,7 @@ const CommentsForm = ({ slug }: any) => {
 
   useEffect(() => {
     const userInfo: any = JSON.parse(
-      localStorage.getItem("omiyaBlog:userInfo") || "{}"
+      window.localStorage.getItem("omiyaBlog:userInfo") || "{}"
     );
     const initalFormData = {
       ...formData,
@@ -25,7 +26,6 @@ const CommentsForm = ({ slug }: any) => {
   const handleCommentSubmit = () => {
     setError(false);
     const { name, email, comment, storeData } = formData;
-    console.log(name, email, comment);
 
     if (!comment || !name || !email) {
       setError(true);
@@ -39,13 +39,22 @@ const CommentsForm = ({ slug }: any) => {
     };
 
     if (storeData) {
-      localStorage.setItem(
+      window.localStorage.setItem(
         "omiyaBlog:userInfo",
         JSON.stringify({ name, email })
       );
     } else {
-      localStorage.removeItem("omiyaBlog:userInfo");
+      window.localStorage.removeItem("omiyaBlog:userInfo");
     }
+    submitComment(commentInfo)
+      .then((res) => {
+        setShowSuccessMessage(true);
+        setTimeout(() => {
+          console.log(res);
+          setShowSuccessMessage(false);
+        }, 3000);
+      })
+      .catch((err) => console.log(err));
   };
 
   const onInputChange = (
@@ -107,6 +116,7 @@ const CommentsForm = ({ slug }: any) => {
             type="checkbox"
             id="storeData"
             name="storeData"
+            onChange={onInputChange}
             checked={formData.storeData}
           />
           <label
